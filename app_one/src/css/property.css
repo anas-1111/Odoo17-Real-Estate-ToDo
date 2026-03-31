@@ -1,0 +1,9 @@
+.header_customs table thead > tr > th {
+    background-color: #7BD3EA !important;
+    color: whitesmoke !important;
+    text-align: center !important;
+}
+
+.header_customs table thead > tr > th:nth-child(2) {
+    width: 250px !important;
+}

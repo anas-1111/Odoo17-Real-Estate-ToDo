@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<odoo>
+    <data>
+        <record id="change_assign_wizard_view_form" model="ir.ui.view">
+            <field name="name">change assign wizard form</field>
+            <field name="model">change.assign</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <field name="task_id" invisible="1"/>
+                        <field name="assigned_to" required="1"/>
+                        <field name="reason" required="1"/>
+                    </group>
+                    <footer>
+                        <button string="Confirm" type="object" name="action_confirm" class="btn-primary"/>
+                        <button string="Cancel" special="cancel" class="btn-secondry"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="change_assign_wizard_action" model="ir.actions.act_window">
+            <field name="name">Change assign</field>
+            <field name="res_model">change.assign</field>
+            <field name="target">new</field>
+            <field name="view_mode">form</field>
+        </record>
+    </data>
+</odoo>

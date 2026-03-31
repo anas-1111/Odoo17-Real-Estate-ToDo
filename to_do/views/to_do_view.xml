@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="to_do_view_tree" model="ir.ui.view">
+        <field name="name">to do tree</field>
+        <field name="model">todo</field>
+        <field name="arch" type="xml">
+            <tree  decoration-danger="(is_late)" multi_edit="1">
+                <field name="name"/>
+                <field name="assigned_to"/>
+                <field name="description"/>
+                <field name="estimated_time"/>
+                <field name="due_date"/>
+                <field name="status"/>
+                <field name="active"/>
+                <field name="is_late"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="to_do_view_form" model="ir.ui.view">
+        <field name="name">to do form</field>
+        <field name="model">todo</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <header>
+                        <button name="action_in_progress"
+                                type="object"
+                                class="btn-primary"
+                                string="Set to In Progress"
+                                invisible="status != 'new'"/>
+
+                        <button name="action_completed"
+                                type="object"
+                                class="btn-primary"
+                                string="Set to Completed"
+                                invisible="status != 'in progress'"/>
+
+                        <field name="status" widget="statusbar"/>
+                    </header>
+
+                    <div class="oe.title">
+                        <label for="ref"/>
+                        <h1>
+                            <field name="ref"/>
+                        </h1>
+                        <label for="name"/>
+                        <h3>
+                            <field name="name"/>
+                        </h3>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="assigned_to"/>
+                            <field name="estimated_time"/>
+                            <field name="due_date"/>
+                            <field name="description"/>
+                            <field name="active"/>
+                            <field name="is_late"/>
+                        </group>
+
+                    </group>
+                    <notebook>
+                        <page string="Detailes">
+                            <field name="line_ids">
+                                <tree editable="bottom">
+                                    <field name="description"/>
+                                    <field name="time"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="to_do_view_search" model="ir.ui.view">
+        <field name="name">todo search</field>
+        <field name="model">todo</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="assigned_to"/>
+
+                <filter name="is_new" string="Is New" domain="[('status', '=', 'new')]"/>
+                <filter name="is_in_progress" string="Is In Progress" domain="[('status', '=', 'in progress')]"/>
+                <filter name="is_completed" string="Is Completed" domain="[('status', '=', 'completed')]"/>
+
+                <filter name="group_assigned_to" string="Assigned To" context="{'group_by': 'assigned_to'}"/>
+                <filter name="group_status" string="Status" context="{'group_by': 'status'}"/>
+                <filter name="group_due_date" string="Due Date" context="{'group_by': 'due_date'}"/>
+            </search>
+        </field>
+    </record>
+
+
+    <record id="to_do_action" model="ir.actions.act_window">
+        <field name="name">To Do</field>
+        <field name="res_model">todo</field>
+
+    </record>
+
+    <record id="todo_closed_server_action" model="ir.actions.server">
+        <field name="name">Closed</field>
+        <field name="model_id" ref="model_todo"/>
+        <field name="binding_model_id" ref="model_todo"/>
+        <field name="state">code</field>
+        <field name="code">
+            action=records.action_closed()
+        </field>
+    </record>
+
+    <record id="check_selling_date_cron" model="ir.cron">
+        <field name="name">ToDO: Check Due date</field>
+        <field name="model_id" ref="model_todo"/>
+        <field name="state">code</field>
+        <field name="code">model.check_due_date()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="active">True</field>
+    </record>
+
+    <record id="todo_change_assign_server_action" model="ir.actions.server">
+        <field name="name">Change Assign</field>
+        <field name="model_id" ref="model_todo"/>
+        <field name="binding_model_id" ref="model_todo"/>
+        <field name="state">code</field>
+        <field name="code">
+            action = records.action_open_change_assign_wizard()
+        </field>
+    </record>
+
+    <menuitem
+            id="to_do_menu_item"
+            name="All Tasks"
+            parent="to_do_menu"
+            action="to_do_action"
+    />
+</odoo>

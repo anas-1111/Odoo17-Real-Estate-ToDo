@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_todo,access_todo,model_todo,task_manager_group,1,1,1,1
+access_todo_line,access_todo_line,model_todo_line,task_manager_group,1,1,1,1
+access_change_assign,access_change_assign,model_change_assign,task_manager_group,1,1,1,1
